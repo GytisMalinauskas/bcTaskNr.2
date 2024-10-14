@@ -1,0 +1,15 @@
+#ignore json file
+.vscode/launch.json
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+*.json
+
+#ignore text (.txt) and object files (.o)
+*.txt
+*.o
+program
+file_generator.cpp
+run
+
+#ignore .ds_store
+.ds_store

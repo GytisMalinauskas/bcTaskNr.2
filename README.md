@@ -1,1 +1,1 @@
-# bcTaskNr.2
+# Supaprastintos blokų grandinės (blockchain) v0.1 
