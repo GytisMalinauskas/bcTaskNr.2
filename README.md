@@ -1,1 +1,1 @@
-# Supaprastintos blokų grandinės (blockchain) v0.1 
+# Supaprastinta blokų grandinė (blockchain) v0.1 
