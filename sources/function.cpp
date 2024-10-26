@@ -35,3 +35,15 @@ vector<uint8_t> betterHash(const string& input) {
 
     return hash;
 }
+string calculate_merkle_root(const vector<Transactions>& transaction) {
+    string concatenated_tx_ids;
+
+    // Concatenate all transaction IDs
+    for (const auto& tx : transaction) {
+        concatenated_tx_ids += tx.transactionID;
+    }
+
+    // Return the hash of the concatenated transaction IDs
+    vector<uint8_t> merkle_hash = betterHash(concatenated_tx_ids);
+    return toHexString(merkle_hash);
+}
