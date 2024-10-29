@@ -4,10 +4,10 @@ int main() {
     Blockchain blockchain;
 
     // Generate 1000 users
-    std::vector<User> users = generate_users(1000);
+    vector<User> users = generate_users(1000);
 
     // Generate 10000 transactions
-    std::vector<Transactions> transactions = generate_transactions(users, 10000);
+    vector<Transactions> transactions = generate_transactions(users, 10000);
 
     // Add some transactions to the blockchain
     for (int i = 0; i < 100; ++i) {

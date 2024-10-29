@@ -9,7 +9,7 @@
 #include <vector>
 using namespace std;
 
-vector<uint8_t> betterHash(const string& input);
+vector<uint8_t> Hash(const string& input);
 string toHexString(const vector<uint8_t>& bytes);
 
 struct Transactions{
@@ -66,50 +66,52 @@ struct Block{
 
 class Blockchain {
 private:
-    std::vector<Block> chain;
-    std::vector<Transactions> pending_transactions;
+    vector<Block> chain;
+    vector<Transactions> pending_transactions;
 
 public:
+    //Constructor
     Blockchain() {
-        // Add a genesis block
-        BlockHeader genesis_header("0", 1, "0", 1);
-        chain.push_back(Block(genesis_header, {}));
+        // Add a genesis block when constructing a blockchain
+        BlockHeader genesis_header("0", 1, "0", 1); // Initialized genesis header
+        chain.push_back(Block(genesis_header, {})); // Genesis header and empty transaction array is added
     }
 
-    // Updated hash function
-    std::string hash_function(const BlockHeader &header) {
-        std::string input = header.pHash + 
-                            std::to_string(header.timestamp) + 
-                            std::to_string(header.version) + 
-                            header.mHash + 
-                            std::to_string(header.nonce) + 
-                            std::to_string(header.dTarget);
-                            
-        // Use your betterHash function
-        std::vector<uint8_t> hash_bytes = betterHash(input);
-        
-        // Convert the byte array to a hex string
-        return toHexString(hash_bytes);
+    // Hashing Block Header
+    string hash_function(const BlockHeader &header) {
+        string input =  header.pHash + 
+                        to_string(header.timestamp) + 
+                        to_string(header.version) + 
+                        header.mHash + 
+                        to_string(header.nonce) + 
+                        to_string(header.dTarget);  // Input is concatenated
+        vector<uint8_t> hash_bytes = Hash(input);   // Using my hash for input 
+        return toHexString(hash_bytes);             // Convert the byte array to a hex string
     }
 
+    // Add block function
     void add_block(Block new_block) {
         chain.push_back(new_block);
     }
 
+    // Add transaction function
     void add_transaction(const Transactions &tx) {
         pending_transactions.push_back(tx);
     }
 
+    // Block mining function
     Block mine_block(int difficulty) {
-        BlockHeader header = chain.back().header;
-        header.dTarget = difficulty;
+        BlockHeader header = chain.back().header;   // Initialized header which is the back of the chain
+        header.dTarget = difficulty;                // Difficulty target is set
 
         // Calculate the Merkle root hash of the current pending transactions
         header.mHash = calculate_merkle_root(pending_transactions);
 
         // Mining process: adjust nonce until difficulty target is met
-        while (hash_function(header).substr(0, difficulty) != std::string(difficulty, '0')) {
-            header.nonce++;
+        // Proof-of-work
+        // Loop is active until it finds a hash with O+difficulty zero's in the front
+        while (hash_function(header).substr(0, difficulty) != string(difficulty, '0')) {    
+            header.nonce++; // By changing nonce we change the hash function 
         }
 
         // Create new block and add to blockchain
@@ -120,17 +122,18 @@ public:
         return new_block;
     }
 
+    // Display block function
     void display_block(const Block &block) const {
-        std::cout << "Block Header: " << block.header.pHash << "\n";
-        std::cout << "Timestamp: " << block.header.timestamp << "\n";
-        std::cout << "Merkle Root: " << block.header.mHash << "\n";
-        std::cout << "Difficulty: " << block.header.dTarget << "\n";
-        std::cout << "Nonce: " << block.header.nonce << "\n";
-        std::cout << "Transactions: \n";
+        cout << "Block Header: " << block.header.pHash << "\n";
+        cout << "Timestamp: " << block.header.timestamp << "\n";
+        cout << "Merkle Root: " << block.header.mHash << "\n";
+        cout << "Difficulty: " << block.header.dTarget << "\n";
+        cout << "Nonce: " << block.header.nonce << "\n";
+        cout << "Transactions: \n";
         for (const auto &tx : block.transaction) {
-            std::cout << "Transaction ID: " << tx.transactionID << "\n";
-            std::cout << "Sender: " << tx.sender_pKey << " Receiver: " << tx.receiver_pKey << "\n";
-            std::cout << "Amount: " << tx.amount << "\n";
+            cout << "Transaction ID: " << tx.transactionID << "\n";
+            cout << "Sender: " << tx.sender_pKey << " Receiver: " << tx.receiver_pKey << "\n";
+            cout << "Amount: " << tx.amount << "\n";
         }
     }
 };
