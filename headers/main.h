@@ -31,7 +31,7 @@ struct BlockHeader{
   int version;
   string mHash; //Merkle root hash
   int nonce;
-  int dTarget; //Difficiculty target
+  int dTarget; //Difficulty target
   
   //Constructor
   BlockHeader(string previousHash, int v, string merkleHash, int difficultyTarget):
@@ -76,7 +76,6 @@ public:
         BlockHeader genesis_header("0", 1, "0", 1); // Initialized genesis header
         chain.push_back(Block(genesis_header, {})); // Genesis header and empty transaction array is added
     }
-
     // Hashing Block Header
     string hash_function(const BlockHeader &header) {
         string input =  header.pHash + 
@@ -107,6 +106,16 @@ public:
         // Calculate the Merkle root hash of the current pending transactions
         header.mHash = calculate_merkle_root(pending_transactions);
 
+        // Set the version
+        header.version = chain.back().header.version + 1;
+
+        // Set timestamp 
+        header.timestamp = time(nullptr);
+
+        // Set the previous hash to the hash of the last block
+        header.pHash = hash_function(chain.back().header);
+        // Set the nonce to 0
+        header.nonce = 0;
         // Mining process: adjust nonce until difficulty target is met
         // Proof-of-work
         // Loop is active until it finds a hash with O+difficulty zero's in the front
@@ -123,17 +132,22 @@ public:
     }
 
     // Display block function
-    void display_block(const Block &block) const {
-        cout << "Block Header: " << block.header.pHash << "\n";
+    void display_block() const {
+        for(const auto& block : chain) {
+        cout << "Previous hash: " << block.header.pHash << "\n";
+        cout << "Version: " << block.header.version << "\n";
         cout << "Timestamp: " << block.header.timestamp << "\n";
-        cout << "Merkle Root: " << block.header.mHash << "\n";
+        cout << "Merkle Root hash: " << block.header.mHash << "\n";
         cout << "Difficulty: " << block.header.dTarget << "\n";
         cout << "Nonce: " << block.header.nonce << "\n";
+        if(block.transaction.size()!=0)
         cout << "Transactions: \n";
-        for (const auto &tx : block.transaction) {
+         for (const auto &tx : block.transaction) {
             cout << "Transaction ID: " << tx.transactionID << "\n";
             cout << "Sender: " << tx.sender_pKey << " Receiver: " << tx.receiver_pKey << "\n";
             cout << "Amount: " << tx.amount << "\n";
+        }
+        cout<<endl;
         }
     }
 };

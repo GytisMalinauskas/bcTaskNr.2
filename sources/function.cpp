@@ -27,11 +27,24 @@ vector<uint8_t> Hash(const string& input) {
     return hash;                                            // Returns complete hash
 }
 
-string calculate_merkle_root(const vector<Transactions>& transaction) {
-    string concatenated_tx_ids;
-    for (const auto& tx : transaction) {                            // Concatenate all transaction IDs
-        concatenated_tx_ids += tx.transactionID;                    //
+string calculate_merkle_root(const vector<Transactions>& transactions) {
+    if (transactions.empty()) return ""; // Handle empty input
+
+    vector<string> hashes;
+    for (const auto& tx : transactions) {
+        hashes.push_back(toHexString(Hash(tx.transactionID))); // Start with transaction IDs
     }
-    vector<uint8_t> merkle_hash = Hash(concatenated_tx_ids);  //
-    return toHexString(merkle_hash);                                // Return the hash of the concatenated transaction IDs
+
+    while (hashes.size() > 1) {                                                 //
+        vector<string> new_hashes;
+        for (size_t i = 0; i < hashes.size(); i += 2) {
+            // If there's an odd number of hashes, duplicate the last one
+            string left = hashes[i];
+            string right = (i + 1 < hashes.size()) ? hashes[i + 1] : hashes[i];
+            
+            new_hashes.push_back(toHexString(Hash(left + right))); // Concatenate and hash
+        }
+        hashes = new_hashes; // Move to the next level
+    }
+    return hashes.front(); // The last remaining hash is the Merkle root
 }
