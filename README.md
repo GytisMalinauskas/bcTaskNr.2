@@ -3,8 +3,6 @@
 
 ## Programos naudojimosi instrukcija
 
-```
-
 1. Atsisiųskite paskutinę išleistą versiją (Source code `zip` arba `tar.gz`) ir <br> išskleiskite ją  (tai reiškia nuimkite `zip` arba `tar.gz`, kad liktu tik aplankas).
 
 2. Atsidarykite programavimo aplinką ir įdėkite aplanką ir išsaugokite progresą <br>(šiam žingsniui reikia būti įsidiegus VScode ir atitinkamus `C++` plėtinius <br>(extentions)).
@@ -17,4 +15,3 @@
 
 6. Sėkmingo naudojimosi!
 
-```
