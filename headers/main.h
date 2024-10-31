@@ -91,11 +91,13 @@ public:
     // Add block function
     void add_block(Block new_block) {
         chain.push_back(new_block);
+        cout<<"[INFO] Blokas pridėtas \n";
     }
 
     // Add transaction function
     void add_transaction(const Transactions &tx) {
         pending_transactions.push_back(tx);
+        cout<<"[INFO] Transakcija pridėta \n";
     }
 
     // Block mining function
@@ -127,7 +129,7 @@ public:
         Block new_block(header, pending_transactions);
         pending_transactions.clear();
         add_block(new_block);
-
+        cout << "[INFO] Blokas sėkmingai iškastas" << endl;
         return new_block;
     }
 
