@@ -64,12 +64,25 @@ bool transactionCheck(Transactions transaction, vector <User>& users){
             }
         }   
     }
-    cout << "[INFO] Transakcija atmesta" << endl;
+    cout << "[WARNING] Transakcija atmesta" << endl;
 return false;
 }
+
 void checkBalance(const vector <User> &users){
     for(const auto& user : users)
     {
         cout << "User: " << user.pKey << " Balance: " << user.balance << endl;
     }
+}
+
+bool transactionHashValueCheck(Transactions transaction){
+
+    string hash = transaction.sender_pKey+transaction.receiver_pKey+to_string(transaction.amount);
+    string hashValue = toHexString(Hash(hash));
+    if(transaction.transactionID==hashValue){
+        cout << "[INFO] Transakcijos maišos reikšmė priimta" << endl; 
+        return true;
+    }
+    cout << "[WARNING] Transakcijos maišos reikšmė nepriimta" << endl; 
+    return false;
 }

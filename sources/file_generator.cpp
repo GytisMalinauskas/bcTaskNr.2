@@ -16,8 +16,9 @@ vector<Transactions> generate_transactions(const vector<User> &users, int count)
     for (int i = 0; i < count; ++i) {                                                               // Loop for every transaction that is generated
         const User &sender = users[rand() % users.size()];                                          // Generate sender
         const User &receiver = users[rand() % users.size()];                                        // Generate receiver
-        double amount = rand() % 100000;                                                            // Generate the transaction amount
-        string transaction_id = to_string(i);                                                       // Transaction ID
+        double amount = rand() % 100000;   
+        string hash = sender.pKey+receiver.pKey+to_string(amount);                                                         // Generate the transaction amount
+        string transaction_id = toHexString(Hash(hash));                                                       // Transaction ID
         transaction.push_back(Transactions(transaction_id, sender.pKey, receiver.pKey, amount));    // Generated transactions are pushed into vector 
     }
     return transaction;                                                                             // Returning complete vector

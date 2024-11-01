@@ -17,7 +17,7 @@ int main() {
 
     // Generate users
     vector<User> users = generate_users(userCount);
-    checkBalance(users);
+    //checkBalance(users);
     // Generate transactions
     vector<Transactions> transactions = generate_transactions(users, transactionCount);
 
@@ -30,10 +30,13 @@ int main() {
         if (transactionSum < transactionCount){
             for (int j = 0; j < transactionCount2; ++j) {
                 // Add transactions
-                bool check = transactionCheck(transactions[j],users);
-                if(check == true){
-                   blockchain.add_transaction(transactions[j]); 
-                }
+                bool checkHash = transactionHashValueCheck(transactions[j]);
+                if(checkHash == true){
+                    bool check = transactionCheck(transactions[j],users);
+                    if(check == true){
+                        blockchain.add_transaction(transactions[j]); 
+                    } 
+                }  
             }
         }
         if(transactionSum >= transactionCount){
@@ -41,10 +44,13 @@ int main() {
             transactionCount2+=(transactionCount-transactionSum);
             for (int j = 0; j < transactionCount2; ++j) {
                 // Add transactions
-                bool check = transactionCheck(transactions[j],users);
-                if(check == true){
-                    blockchain.add_transaction(transactions[j]); 
-                }   
+                bool checkHash = transactionHashValueCheck(transactions[j]);
+                if(checkHash == true){
+                    bool check = transactionCheck(transactions[j],users);
+                    if(check == true){
+                        blockchain.add_transaction(transactions[j]); 
+                    } 
+                }  
             }
             transactionStop=true;
         }
@@ -54,7 +60,7 @@ int main() {
     //Display all blockchain blocks
     cout << endl;
     blockchain.display_block();
-    checkBalance(users);
-    
+    //checkBalance(users);
+
     return 0;
 }
