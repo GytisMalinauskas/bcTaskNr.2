@@ -48,3 +48,28 @@ string calculate_merkle_root(const vector<Transactions>& transactions) {
     }
     return hashes.front(); // The last remaining hash is the Merkle root
 }
+
+bool transactionCheck(Transactions transaction, vector <User>& users){
+    for(auto& user : users){
+        if(transaction.sender_pKey==user.pKey){
+            if (user.balance>=transaction.amount){
+                user.balance-=transaction.amount;
+                for(auto& user2 : users){
+                    if(user2.pKey==transaction.receiver_pKey){
+                        user2.balance+=transaction.amount;
+                    }
+                }
+                cout << "[INFO] Transakcija priimta" << endl;
+                return true;
+            }
+        }   
+    }
+    cout << "[INFO] Transakcija atmesta" << endl;
+return false;
+}
+void checkBalance(const vector <User> &users){
+    for(const auto& user : users)
+    {
+        cout << "User: " << user.pKey << " Balance: " << user.balance << endl;
+    }
+}

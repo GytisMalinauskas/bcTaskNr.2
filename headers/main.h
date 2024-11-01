@@ -54,6 +54,8 @@ name(Username), pKey(publicKey), balance(balanceAmount){}
 
 vector<User> generate_users(int count);
 vector<Transactions> generate_transactions(const vector<User> &users, int count);
+bool transactionCheck(Transactions transaction, vector <User>& users);
+void checkBalance(const vector <User> &users);
 
 struct Block{
   BlockHeader header;
