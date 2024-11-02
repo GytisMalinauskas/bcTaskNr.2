@@ -3,7 +3,7 @@
 int main() {
     cout << endl;
     Blockchain blockchain;
-    int userCount, transactionCount, blockCount, transactionCount2, transactionSum=0, difficulty;
+    int userCount, transactionCount, blockCount, transactionCount2, transactionSum=0, difficulty, maxNonce;
     bool transactionStop=false;
     // Inputs for generating
     cout << "[INPUT] Įveskite vartotojų skaičių: ";
@@ -12,8 +12,12 @@ int main() {
     cin >> transactionCount;
     cout << "[INPUT] Įveskite blokų, kuriuos kasime, skaičių: ";
     cin >> blockCount;
-    cout << "[INPUT] Įvesite sudėtingumą: ";
+    cout << "[INPUT] Įveskite sudėtingumą: ";
     cin >> difficulty;
+    cout << "[INPUT] Įveskite makslimalų nonce skaičių: ";
+    cin >> maxNonce;
+
+    int tr = transactionCount;
 
     // Generate users
     vector<User> users = generate_users(userCount);
@@ -28,7 +32,7 @@ int main() {
         cin >> transactionCount2;
         transactionSum+=transactionCount2;
         if (transactionSum < transactionCount){
-            for (int j = 0; j < transactionCount2; ++j) {
+            for (int j = tr - 1; j > tr-transactionCount2; --j) {
                 // Add transactions
                 bool checkHash = transactionHashValueCheck(transactions[j]);
                 if(checkHash == true){
@@ -38,11 +42,12 @@ int main() {
                     } 
                 }  
             }
+            tr -= transactionCount2;
         }
         if(transactionSum >= transactionCount){
             cout << "[WARNING] pasiektas transakcijų limitas" << endl;
             transactionCount2+=(transactionCount-transactionSum);
-            for (int j = 0; j < transactionCount2; ++j) {
+            for (int j = tr - 1; j > tr-transactionCount2; --j) {
                 // Add transactions
                 bool checkHash = transactionHashValueCheck(transactions[j]);
                 if(checkHash == true){
@@ -55,7 +60,7 @@ int main() {
             transactionStop=true;
         }
         }
-        blockchain.mine_block(difficulty);
+        blockchain.mine_block(difficulty, maxNonce);
     }        
     //Display all blockchain blocks
     cout << endl;

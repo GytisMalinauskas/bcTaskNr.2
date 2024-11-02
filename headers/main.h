@@ -104,7 +104,7 @@ public:
     }
 
     // Block mining function
-    Block mine_block(int difficulty) {
+    Block mine_block(int difficulty, int maxNonce) {
         BlockHeader header = chain.back().header;   // Initialized header which is the back of the chain
         header.dTarget = difficulty;                // Difficulty target is set
 
@@ -124,11 +124,21 @@ public:
         // Mining process: adjust nonce until difficulty target is met
         // Proof-of-work
         // Loop is active until it finds a hash with O+difficulty zero's in the front
+        bool nonceCheck = false;
         while (hash_function(header).substr(0, difficulty) != string(difficulty, '0')) {    
+            if(maxNonce==header.nonce){
+                nonceCheck=true;
+                break;
+            }
             header.nonce++; // By changing nonce we change the hash function 
         }
 
         // Create new block and add to blockchain
+        if(nonceCheck==true){
+            cout << "[WARNING] Viršytas nonce limitas" << endl;
+            cout << "[INFO] Stadbdoma bloko kasyba" << endl;
+             return Block(BlockHeader("", 0, "", 0), {}); // Return an empty block
+        }
         Block new_block(header, pending_transactions);
         pending_transactions.clear();
         add_block(new_block);
@@ -146,7 +156,7 @@ public:
         cout << "Difficulty: " << block.header.dTarget << "\n";
         cout << "Nonce: " << block.header.nonce << "\n";
         if(block.transaction.size()!=0)
-        cout << "Transactions: \n";
+        cout << "Transactions: " << block.transaction.size() << "\n" << endl;
          for (const auto &tx : block.transaction) {
             cout << "Transaction ID: " << tx.transactionID << "\n";
             cout << "Sender: " << tx.sender_pKey << " Receiver: " << tx.receiver_pKey << "\n";

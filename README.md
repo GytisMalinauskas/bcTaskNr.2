@@ -1,4 +1,4 @@
-# Supaprastinta blokų grandinė (blockchain) v0.1 
+# Supaprastinta blokų grandinė (blockchain) v0.2 
 ### Autorius: Gytis Malinauskas
 
 ## Programos naudojimosi instrukcija

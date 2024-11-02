@@ -5,7 +5,7 @@ vector<User> generate_users(int count) {
     for (int i = 0; i < count; ++i) {                       // Loop for every user that is generated
         string name = "User" + to_string(i);                // Username
         string public_key = "public_key_" + to_string(i);   // Public key
-        double balance = rand() % 10000;            // Generate balance
+        double balance = rand() % 100000;            // Generate balance
         users.push_back(User(name, public_key, balance));   // Generated users are pushed into vector
     }
     return users;                                           // Returning complete vector
